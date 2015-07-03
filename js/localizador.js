@@ -16,8 +16,6 @@ $(document).ready(function(){
 	$("#btnBuscar").click(function(event){
 		cleanResultado();
 		var addresses = $("#direcciones").val().split("\n");
-		$("#resultados").show();
-		$(".progress").show();
 		$.each(addresses, function(key, address) {
 			if ($.trim(address) != ""){
 				var addressObj = {};
@@ -28,10 +26,13 @@ $(document).ready(function(){
 		});
 		if (searchStack.length>0){
 			searchStackSize = searchStack.length;
-			seeker = setInterval(geoCodeAddress, 2000);
+			cleanProgress();
+			$("#resultados").show();
+			$(".progress").show();
+			$("#btnStop").show();
+			$("#btnBuscar").hide();
+			geoCodeAddress();
 		}
-		$("#btnStop").show();
-		$("#btnBuscar").hide();
 	});
 	$("#btnLimpiar").click(function(event){
 		cleanResultado();
@@ -45,7 +46,9 @@ $(document).ready(function(){
 });
 
 function finishGeoCode(){
-	clearInterval(seeker);
+	if (seeker != null){
+		clearTimeout(seeker);
+	}
 	searchStack = new Array();
 	$(".progress").hide();
 	$("#btnStop").hide();
@@ -77,15 +80,29 @@ function geoCodeAddress(){
 		//REQUEST_DENIED	The webpage is not allowed to use the geocoder.
 		//UNKNOWN_ERROR	A geocoding request could not be processed due to a server error. The request may succeed if you try again.
 		//ZERO_RESULTS
-		var $progress = $(".progress > .progress-bar");
-		var percent = (100 - Math.ceil(( searchStack.length/searchStackSize)*100)) + "%";
-		$progress.css("width", percent);
-		$progress.text(percent);
+		setProgress();
 		if (searchStack.length == 0){
 			finishGeoCode();
+		}else{
+			seeker = setTimeout(geoCodeAddress, 2000);
 		}
 	});
 
+}
+
+function cleanProgress(){
+	var $progress = $(".progress > .progress-bar");
+	var percent = "0%";
+	$progress.css("width", percent);
+	$progress.text(percent);
+}
+
+
+function setProgress(){
+	var $progress = $(".progress > .progress-bar");
+	var percent = Math.ceil(( (searchStackSize - searchStack.length)/searchStackSize)*100) + "%";
+	$progress.css("width", percent);
+	$progress.text(percent);
 }
 
 function addResultado(id, busqueda, resultado, estado){
