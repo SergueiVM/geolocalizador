@@ -61,17 +61,17 @@ function geoCodeAddress(){
 		if (status == google.maps.GeocoderStatus.OK) {
 				addResultado(addressObj.id, addressObj.address, results, "success");
 		}else if (status == google.maps.GeocoderStatus.ERROR) {
-			addResultado(addressObj.id, addressObj.address, results, "error");
+			addResultado(addressObj.id, addressObj.address, results, "danger");
 		}else if (status == google.maps.GeocoderStatus.INVALID_REQUEST) {
-			addResultado(addressObj.id, addressObj.address, results, "error");
+			addResultado(addressObj.id, addressObj.address, results, "danger");
 		}else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-			addResultado(addressObj.id, addressObj.address, results, "error");
+			addResultado(addressObj.id, addressObj.address, results, "danger");
 		}else if (status == google.maps.GeocoderStatus.REQUEST_DENIED) {
-			addResultado(addressObj.id, addressObj.address, results, "error");
+			addResultado(addressObj.id, addressObj.address, results, "danger");
 		}else if (status == google.maps.GeocoderStatus.UNKNOWN_ERROR) {
-			addResultado(addressObj.id, addressObj.address, results, "error");
+			addResultado(addressObj.id, addressObj.address, results, "danger");
 		}else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
-			addResultado(addressObj.id, addressObj.address, results, "error");
+			addResultado(addressObj.id, addressObj.address, results, "danger");
 		}
 		//ERROR	There was a problem contacting the Google servers.
 		//INVALID_REQUEST	This GeocoderRequest was invalid.
@@ -106,26 +106,92 @@ function setProgress(){
 }
 
 function addResultado(id, busqueda, resultado, estado){
-	var $resultado = $("<tr></tr>");
-	$resultado.addClass(estado);
-//	$resultado.append("<td>"+id+"</td>"); //Id
-	$resultado.append("<td>"+busqueda+"</td>"); //Busqueda
-	if (resultado == null){
-		$resultado.append("<td></td>"); //Direccion
-		$resultado.append("<td></td>"); //Longitud
-		$resultado.append("<td></td>"); //Latitud
-		//		$resultado.append("<td></td>"); //Precision
-
+	if (resultado == null || resultado.length == 0){
+		var $fila = $("<tr></tr>");
+		$fila.addClass(estado);
+		$fila.append("<td></td>");
+		$fila.append($("<td></td>").append(busqueda)); //Busqueda
+		$fila.append("<td></td>"); //Direccion
+		$fila.append("<td></td>"); //Longitud
+		$fila.append("<td></td>"); //Latitud
+		$fila.append("<td></td>"); //Precision
+		$("#resultados > tbody").append($fila);
 	}else{
-		$resultado.append("<td>"+resultado[0].formatted_address+"</td>"); //Direccion
-		$resultado.append("<td>"+resultado[0].geometry.location.lng()+"</td>"); //Longitud
-		$resultado.append("<td>"+resultado[0].geometry.location.lat()+"</td>"); //Latitud
-		//		$resultado.append("<td>"+resultado[0].geometry.location_type+"</td>"); //Precision
+			for(var i= 0; i < resultado.length; i++){
+				var $fila = $("<tr></tr>");
+				$fila.addClass(estado);
+				$fila.append($("<td></td>").append((i+1)+" / "+resultado.length));
+				$fila.append($("<td></td>").append(busqueda)); //Busqueda
+				$fila.append($("<td></td>").append(resultado[i].formatted_address)); //Direccion Formateada
+
+				//$fila.append($("<td></td>").append(getAddressComponent(resultado[i], ADDRESS.DIRECCION))); //Direccion
+				//$fila.append($("<td></td>").append(getAddressComponent(resultado[i], ADDRESS.COD_POSTAL))); //Codigo Postal
+				//$fila.append($("<td></td>").append(getAddressComponent(resultado[i], ADDRESS.POBLACION))); //Poblacion
+				//$fila.append($("<td></td>").append(getAddressComponent(resultado[i], ADDRESS.MUNICIPIO))); //Municipio
+				//$fila.append($("<td></td>").append(getAddressComponent(resultado[i], ADDRESS.REGION))); //Región
+				//$fila.append($("<td></td>").append(getAddressComponent(resultado[i], ADDRESS.PAIS))); //Pais
+				$fila.append($("<td></td>").append(resultado[i].geometry.location.lng())); //Longitud
+				$fila.append($("<td></td>").append(resultado[i].geometry.location.lat())); //Latitud
+				var precision = translateLocationType(resultado[i].geometry.location_type);
+				$fila.append($("<td></td>",{
+					"title":tooltipLocationType(resultado[i].geometry.location_type)
+				}).append(precision)); //Precision
+				$("#resultados > tbody").append($fila);
+			}
 	}
-	$("#resultados > tbody").append($resultado);
+}
+
+var ADDRESS = {
+	DIRECCION: 0,
+	POBLACION: 1,
+	MUNICIPIO: 2,
+	REGION: 3,
+	PAIS: 4,
+	COD_POSTAL: 5,
+	FORMATEADA: -1
+};
+function getAddressComponent(localizacion, component){
+	var resultado = "";
+	if (localizacion != null && typeof(localizacion.address_components) != "undefined"){
+		if (component == ADDRESS.FORMATEADA){
+			resultado = localizacion.formatted_address;
+		}else if (localizacion.address_components.length > component){
+			resultado = localizacion.address_components[component].long_name;
+		}
+	}
+	return resultado;
 }
 
 function cleanResultado(){
 	var $resultado = $("#resultados > tbody:last");
 	$resultado.empty();
+}
+
+function translateLocationType(locationType){
+	var resultado = "";
+	if (typeof(locationType) != "undefined" && locationType != null){
+		if (locationType == "ROOFTOP"){
+			resultado = "Exacta";
+		}else if (locationType == "RANGE_INTERPOLATED"){
+			resultado = "Rango Interpolado";
+		}else if (locationType == "GEOMETRIC_CENTER"){
+			resultado = "Centro Geom&eacute;trico";
+		}else if (locationType == "APPROXIMATE"){
+			resultado = "Aproximado";
+		}
+	}
+	return resultado;
+}
+function tooltipLocationType(locationType){
+	var resultado = null;
+	if (locationType == "ROOFTOP"){
+		resultado = "Indica que el resultado devuelto es una codificación geográfica precisa para los que tenemos información sobre la ubicación exacta hasta la calle Dirección de precisión";
+	}else if (locationType == "RANGE_INTERPOLATED"){
+		resultado = "Indica que el resultado devuelto refleja una aproximación (por lo general en una carretera) interpolado entre dos puntos precisos (tales como intersecciones). Resultados interpolados se devuelven generalmente cuando la codificación geográfica de la azotea no están disponibles para una dirección de calle.";
+	}else if (locationType == "GEOMETRIC_CENTER"){
+		resultado = "Indica que el resultado devuelto es el centro geométrico de un resultado tal como una polilínea (por ejemplo, una calle) o polígono (región)";
+	}else if (locationType == "APPROXIMATE"){
+		resultado = "Indica que el resultado devuelto es aproximada.";
+	}
+	return resultado;
 }
