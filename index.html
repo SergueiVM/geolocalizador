@@ -21,11 +21,11 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 </head>
-<body class="container" ng-controller="geoLocalizadorController as geoCtrl" ng-cloak>
-	<header class='page-header'>
+<body ng-controller="geoLocalizadorController as geoCtrl" ng-cloak>
+	<header class="page-header container">
 		<h1>Localizador de Coordenadas</h1>
 	</header>
-	<main>
+	<main class="container">
 		<form role="form" name="formulario" novalidate ng-submit="geoCtrl.buscar()">
 			<div class="form-group">
 				<label for="direcciones">Direcciones a buscar</label>
