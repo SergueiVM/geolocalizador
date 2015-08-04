@@ -101,7 +101,7 @@ app.controller("geoLocalizadorController", function($scope, $timeout, $log){
 			}else if (locationType == "RANGE_INTERPOLATED"){
 				resultado = "Rango Interpolado";
 			}else if (locationType == "GEOMETRIC_CENTER"){
-				resultado = "Centro Geométrico";
+				resultado = "Centro Geometrico";
 			}else if (locationType == "APPROXIMATE"){
 				resultado = "Aproximado";
 			}

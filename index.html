@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="geolocalizador" lang="es">
+<html data-ng-app="geolocalizador" lang="es">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,29 +21,29 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 </head>
-<body ng-controller="geoLocalizadorController as geoCtrl" ng-cloak>
+<body data-ng-controller="geoLocalizadorController as geoCtrl" data-ng-cloak>
 	<header class="page-header container">
 		<h1>Localizador de Coordenadas</h1>
 	</header>
 	<main class="container">
-		<form role="form" name="formulario" novalidate ng-submit="geoCtrl.buscar()">
+		<form role="form" name="formulario" novalidate data-ng-submit="geoCtrl.buscar()">
 			<div class="form-group">
 				<label for="direcciones">Direcciones a buscar</label>
-				<textarea id="direcciones" ng-model="geoCtrl.direcciones" class="form-control" placeholder="Introduzca una direcci&oacute;n por l&iacute;nea" required></textarea>
+				<textarea id="direcciones" data-ng-model="geoCtrl.direcciones" class="form-control" placeholder="Introduzca una direcci&oacute;n por l&iacute;nea" required></textarea>
 			</div>
 			<div class="form-group">
-				<button type="submit" class="btn btn-primary" ng-disabled="formulario.$invalid" ng-hide="geoCtrl.state.running">Buscar</button>
-				<button type="button" class="btn btn-danger" ng-show="geoCtrl.state.running" ng-click="geoCtrl.parar()">Parar</button>
-				<button type="reset" class="btn btn-default" ng-disabled="geoCtrl.direcciones == null && geoCtrl.listaResultados.length == 0" ng-click="geoCtrl.limpiar()" ng-hide="geoCtrl.state.running">Limpiar</button>
+				<button type="submit" class="btn btn-primary" data-ng-disabled="formulario.$invalid" data-ng-hide="geoCtrl.state.running">Buscar</button>
+				<button type="button" class="btn btn-danger" data-ng-show="geoCtrl.state.running" data-ng-click="geoCtrl.parar()">Parar</button>
+				<button type="reset" class="btn btn-default" data-ng-disabled="geoCtrl.direcciones == null && geoCtrl.listaResultados.length == 0" data-ng-click="geoCtrl.limpiar()" data-ng-hide="geoCtrl.state.running">Limpiar</button>
 			</div>
 		</form>
-		<div class="progress" ng-if="geoCtrl.state.running">
-			<div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{width: geoCtrl.state.percent()+'%'}">{{geoCtrl.state.percent() }}%</div>
+		<div class="progress" data-ng-if="geoCtrl.state.running">
+			<div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-ng-style="{width: geoCtrl.state.percent()+'%'}">{{geoCtrl.state.percent() }}%</div>
 		</div>
-		<div ng-repeat="busqueda in geoCtrl.listaResultados" class="bs-callout" ng-class="busqueda.hasResults()?'bs-callout-success':'bs-callout-danger'">
-			<button type="button" class="close" ng-click="geoCtrl.descartar($index, null)" title="Descartar"><span aria-hidden="true">&times;</span></button>
+		<div data-ng-repeat="busqueda in geoCtrl.listaResultados" class="bs-callout" data-ng-class="busqueda.hasResults()?'bs-callout-success':'bs-callout-danger'">
+			<button type="button" class="close" data-ng-click="geoCtrl.descartar($index, null)" title="Descartar"><span aria-hidden="true">&times;</span></button>
 			<h2>{{busqueda.termino}}</h2>
-			<div class="table-responsive" ng-if="busqueda.hasResults()">
+			<div class="table-responsive" data-ng-if="busqueda.hasResults()">
 				<table class="table table-condensed">
 					<tr>
 						<th>Dirección</th>
@@ -52,16 +52,16 @@
 						<th>Precisión</th>
 						<th></th>
 					</tr>
-					<tr ng-repeat="candidato in busqueda.candidatos">
+					<tr data-ng-repeat="candidato in busqueda.candidatos">
 						<td>{{candidato.direccion}}</td>
 						<td>{{candidato.coordenadas.longitud}}</td>
 						<td>{{candidato.coordenadas.latitud}}</td>
 						<td>{{candidato.precision}}</td>
-						<td><button class="btn btn-danger btn-xs" ng-click="geoCtrl.descartar($parent.$index, $index)" title="Descartar"><span class="glyphicon glyphicon-remove"></span></button></td>
+						<td><button class="btn btn-danger btn-xs" data-ng-click="geoCtrl.descartar($parent.$index, $index)" title="Descartar"><span class="glyphicon glyphicon-remove"></span></button></td>
 					</tr>	
 				</table>
 			</div>
-			<div ng-if="!busqueda.hasResults()">No hay resultados para este término de búsqueda</div>
+			<div data-ng-if="!busqueda.hasResults()">No hay resultados para este término de búsqueda</div>
 		</div>
 		<div class="push"></div>
 	</main>
