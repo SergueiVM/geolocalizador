@@ -93,18 +93,18 @@ app.controller("geoLocalizadorController", function($scope, $timeout, $log){
 		}
 	}
 	
+	
+	var LocationTypeTranslation = {
+		"ROOFTOP": "Exacta",
+		"RANGE_INTERPOLATED": "Rango Interpolado",
+		"GEOMETRIC_CENTER": "Centro Geom\u00E9trico",
+		"APPROXIMATE": "Aproximado"
+	}
+
 	function translateLocationType(locationType){
 		var resultado = "";
 		if (typeof(locationType) != "undefined" && locationType != null){
-			if (locationType == "ROOFTOP"){
-				resultado = "Exacta";
-			}else if (locationType == "RANGE_INTERPOLATED"){
-				resultado = "Rango Interpolado";
-			}else if (locationType == "GEOMETRIC_CENTER"){
-				resultado = "Centro Geometrico";
-			}else if (locationType == "APPROXIMATE"){
-				resultado = "Aproximado";
-			}
+			resultado = LocationTypeTranslation[locationType];
 		}
 		return resultado;
 	}
