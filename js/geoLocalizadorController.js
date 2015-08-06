@@ -12,7 +12,8 @@ app.controller("geoLocalizadorController", function($scope, $timeout, $log){
 			return Math.ceil(resultado);
 		},
 		initial: 0,
-		searched: 0
+		searched: 0,
+		duplicates: false
 	}
 	var seeker = null;
 	geocoder = new google.maps.Geocoder();
@@ -20,8 +21,8 @@ app.controller("geoLocalizadorController", function($scope, $timeout, $log){
 	this.buscar = function(){
 		this.listaResultados = new Array();
 		this.state.running = true;
-		var terminos = this.direcciones.split("\n");
-
+		var dirArray = this.direcciones.split("\n");
+		var terminos = getArrayWithoutDuplicates(dirArray);
 		if (terminos.length > 0){
 			for(var i=0; i< terminos.length; i++){
 				var busqueda = new Busqueda();
@@ -30,6 +31,7 @@ app.controller("geoLocalizadorController", function($scope, $timeout, $log){
 			}
 			this.state.initial = terminos.length;
 			this.state.searched = 0;
+			this.state.duplicates = (terminos.length != dirArray.length);
 			geoLocalizar();
 		}
 	}
@@ -62,7 +64,6 @@ app.controller("geoLocalizadorController", function($scope, $timeout, $log){
 	
 	function geoLocalizar(){
 		var pendientes = getPendientes();
-		// var termino = ctrl.terminos.pop();
 		
 		if (pendientes.length > 0){
 			var busqueda = pendientes[0];
@@ -96,7 +97,7 @@ app.controller("geoLocalizadorController", function($scope, $timeout, $log){
 			ctrl.state.running = false;
 		}
 	}
-
+	
 	function translateLocationType(locationType){
 		var resultado = "";
 		if (typeof(locationType) != "undefined" && locationType != null){

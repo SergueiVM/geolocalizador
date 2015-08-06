@@ -41,6 +41,9 @@
 		<div class="progress" data-ng-if="geoCtrl.state.running">
 			<div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-ng-style="{width: geoCtrl.state.percent()+'%'}">{{geoCtrl.state.percent() }}%</div>
 		</div>
+		<div class="alert alert-warning" data-ng-if="geoCtrl.state.duplicates">
+			<strong>Atenci&oacute;n!</strong> Hemos visto que has introducido alguna direcci&oacute;n duplicada, solo la buscaremos una vez para optimizar nuestros recursos.
+		</div>
 		<div data-ng-repeat="busqueda in geoCtrl.listaResultados|filter:{state: true}" class="bs-callout" data-ng-class="busqueda.hasResults()?'bs-callout-success':'bs-callout-danger'">
 			<button type="button" class="close" data-ng-click="geoCtrl.descartar($index, null)" title="Descartar"><span aria-hidden="true">&times;</span></button>
 			<h2>{{busqueda.termino}}</h2>

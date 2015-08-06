@@ -22,3 +22,11 @@ var LocationTypeTranslation = {
 	"GEOMETRIC_CENTER": "Centro Geom\u00E9trico",
 	"APPROXIMATE": "Aproximado"
 }
+
+// Habria que hacer una clase de utilidades pero utilizamos esta de momento.
+function getArrayWithoutDuplicates(a) {
+    var seen = {};
+    return a.filter(function(item) {
+        return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+    });
+}
