@@ -2,7 +2,6 @@ app.controller("geoLocalizadorController", function($scope, $timeout, $log){
 	var ctrl = this;
 	this.direcciones = null;
 	this.listaResultados = new Array();
-	this.terminos = new Array();
 	this.state = {
 		running: false,
 		percent: function(){
@@ -21,9 +20,15 @@ app.controller("geoLocalizadorController", function($scope, $timeout, $log){
 	this.buscar = function(){
 		this.listaResultados = new Array();
 		this.state.running = true;
-		this.terminos = this.direcciones.split("\n");
-		if (this.terminos.length > 0){
-			this.state.initial = ctrl.terminos.length;
+		var terminos = this.direcciones.split("\n");
+
+		if (terminos.length > 0){
+			for(var i=0; i< terminos.length; i++){
+				var busqueda = new Busqueda();
+				busqueda.termino = terminos[i];
+				this.listaResultados.push(busqueda);
+			}
+			this.state.initial = terminos.length;
 			this.state.searched = 0;
 			geoLocalizar();
 		}
@@ -48,20 +53,30 @@ app.controller("geoLocalizadorController", function($scope, $timeout, $log){
 		this.listaResultados = new Array();
 	}
 	//Funciones privadas
-	function geoLocalizar(){
-		var termino = ctrl.terminos.pop();
-		geocoder.geocode( { 'address': termino}, function(results, status) {
-			$scope.$apply(function(){
-				procesarResultado(termino, results, status);
-				ctrl.state.searched++;
-			});
+	function getPendientes(){
+		var pendientes = ctrl.listaResultados.filter(function(elemento){
+			return !elemento.state;
 		});
+		return pendientes;
 	}
-	function procesarResultado(termino, resultados, estado){
+	
+	function geoLocalizar(){
+		var pendientes = getPendientes();
+		// var termino = ctrl.terminos.pop();
+		
+		if (pendientes.length > 0){
+			var busqueda = pendientes[0];
+			geocoder.geocode( { 'address': busqueda.termino}, function(results, status) {
+				$scope.$apply(function(){
+					procesarResultado(busqueda, results, status);
+					ctrl.state.searched++;
+				});
+			});
+		}
+	}
+	function procesarResultado(busqueda, resultados, estado){
 		if (estado == google.maps.GeocoderStatus.OK || estado == google.maps.GeocoderStatus.ZERO_RESULTS) {
-			var busqueda = new Busqueda();
-			busqueda.termino = termino;
-			$log.debug("El termino: "+termino+ " tiene "+resultados.length+" candidatos");
+			$log.debug("El termino: "+busqueda.termino+ " tiene "+resultados.length+" candidatos");
 			for(var i= 0; i < resultados.length; i++){
 				var poi = new Poi();
 				poi.direccion = resultados[i].formatted_address;
@@ -70,35 +85,16 @@ app.controller("geoLocalizadorController", function($scope, $timeout, $log){
 				poi.precision = translateLocationType(resultados[i].geometry.location_type);
 				busqueda.candidatos.push(poi);
 			}
-			ctrl.listaResultados.push(busqueda);
-			
-		// }else if (status == google.maps.GeocoderStatus.ERROR) {
-			// addResultado(addressObj.id, addressObj.address, results, "danger");
-		// }else if (status == google.maps.GeocoderStatus.INVALID_REQUEST) {
-			// addResultado(addressObj.id, addressObj.address, results, "danger");
-		// }else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-			// addResultado(addressObj.id, addressObj.address, results, "danger");
-		// }else if (status == google.maps.GeocoderStatus.REQUEST_DENIED) {
-			// addResultado(addressObj.id, addressObj.address, results, "danger");
-		// }else if (status == google.maps.GeocoderStatus.UNKNOWN_ERROR) {
-			// addResultado(addressObj.id, addressObj.address, results, "danger");
+			busqueda.state = true;			
 		}else{
 			alert("Error" + estado);
 		}
 		
-		if (ctrl.terminos.length !== 0){
+		if (getPendientes().length > 0){
 			seeker = $timeout(geoLocalizar, 2000);
 		}else{
 			ctrl.state.running = false;
 		}
-	}
-	
-	
-	var LocationTypeTranslation = {
-		"ROOFTOP": "Exacta",
-		"RANGE_INTERPOLATED": "Rango Interpolado",
-		"GEOMETRIC_CENTER": "Centro Geom\u00E9trico",
-		"APPROXIMATE": "Aproximado"
 	}
 
 	function translateLocationType(locationType){

@@ -41,7 +41,7 @@
 		<div class="progress" data-ng-if="geoCtrl.state.running">
 			<div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-ng-style="{width: geoCtrl.state.percent()+'%'}">{{geoCtrl.state.percent() }}%</div>
 		</div>
-		<div data-ng-repeat="busqueda in geoCtrl.listaResultados" class="bs-callout" data-ng-class="busqueda.hasResults()?'bs-callout-success':'bs-callout-danger'">
+		<div data-ng-repeat="busqueda in geoCtrl.listaResultados|filter:{state: true}" class="bs-callout" data-ng-class="busqueda.hasResults()?'bs-callout-success':'bs-callout-danger'">
 			<button type="button" class="close" data-ng-click="geoCtrl.descartar($index, null)" title="Descartar"><span aria-hidden="true">&times;</span></button>
 			<h2>{{busqueda.termino}}</h2>
 			<div class="table-responsive" data-ng-if="busqueda.hasResults()">
@@ -84,6 +84,6 @@
 	<script src="js/app.js" charset="UTF-8"></script>
 	<script src="js/datamodel.js" charset="UTF-8"></script>	
 	<script src="js/geoLocalizadorController.js" charset="UTF-8"></script>	
-	<script src="js/googleanalytics.js"></script>
+	<!--<script src="js/googleanalytics.js"></script>-->
 </body>
 </html>

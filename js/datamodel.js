@@ -13,4 +13,12 @@ function Busqueda(){
 	this.hasResults = function(){
 		return this.candidatos.length > 0;
 	}
+	this.state = false;
+}
+
+var LocationTypeTranslation = {
+	"ROOFTOP": "Exacta",
+	"RANGE_INTERPOLATED": "Rango Interpolado",
+	"GEOMETRIC_CENTER": "Centro Geom\u00E9trico",
+	"APPROXIMATE": "Aproximado"
 }
