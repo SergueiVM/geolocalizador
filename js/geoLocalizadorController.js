@@ -34,6 +34,7 @@ app.controller("geoLocalizadorController", function($scope, $timeout, $log){
 			this.state.duplicates = (terminos.length != dirArray.length);
 			geoLocalizar();
 		}
+		ga('send', 'event', 'buscar', 'clicked');
 	}
 	
 	this.descartar = function( indexTermino, indexCandidato){
@@ -42,17 +43,20 @@ app.controller("geoLocalizadorController", function($scope, $timeout, $log){
 		}else{
 			this.listaResultados.splice(indexTermino, 1);
 		}
+		ga('send', 'event', 'descartar', 'clicked');
 	}
 
 	
 	this.parar = function(){
 		$timeout.cancel(seeker);
 		this.state.running = false;
+		ga('send', 'event', 'parar', 'clicked');
 	}
 	
 	this.limpiar = function(){
 		this.direcciones = null;
 		this.listaResultados = new Array();
+		ga('send', 'event', 'limpiar', 'clicked');
 	}
 	//Funciones privadas
 	function getPendientes(){
