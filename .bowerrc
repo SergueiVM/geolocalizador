@@ -1,3 +1,4 @@
 {
-	"directory": "lib"
+"proxy":"http://localhost:5865",
+"https-proxy":"http://localhost:5865" 
 }

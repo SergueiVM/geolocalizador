@@ -1,3 +1,8 @@
 /.tern-project
 /.settings
 /.project
+/node_modules
+/bower_components
+/dist
+/src/styles
+/src/libs
