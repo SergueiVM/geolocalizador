@@ -7,6 +7,7 @@
     "autoprefixer": "^6.1.2",
     "cssnano": "^3.3.2",
     "grunt": "^0.4.5",
+    "grunt-cli": "^1.2.0",
     "grunt-concurrent": "^2.3.0",
     "grunt-contrib-clean": "^0.7.0",
     "grunt-contrib-concat": "^0.5.1",
@@ -16,7 +17,7 @@
     "grunt-gh-pages": "^1.0.0",
     "grunt-postcss": "^0.7.1"
   },
-  "scripts":{
+  "scripts": {
     "postinstall": "bower install",
     "prestart": "npm install",
     "start": "grunt default"
