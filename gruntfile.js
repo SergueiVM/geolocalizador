@@ -56,8 +56,8 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: [
-					"bower_components/angular/angular.min.js",
-                    "src/scripts/**/*.js"
+                  "bower_components/angular/angular.min.js",
+                  "src/scripts/**/*.js"
                 ],
                 dest: "src/libs/app.js"
             }
@@ -77,7 +77,7 @@ module.exports = function(grunt) {
             },
             applicationjs: {
                 files: ["src/scripts/**/*.js"],
-				tasks: ["concat"]          
+                tasks: ["concat"]          
             },
             html: {
                 files: ["src/**/*.html"],
@@ -96,7 +96,13 @@ module.exports = function(grunt) {
                 message: commitMessage
             },
             src: '**/*'
-        }
+        },
+        //Tareas que se pueden realizar concurrentemente.
+        concurrent: {
+          preparation: [["less", "postcss"],"concat"],
+          copy: ["copy:styles", "copy:html", "copy:libs", "copy:fonts"]
+        }        
+        
     });
 
     // Cargar módulos de Grunt
@@ -106,10 +112,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-postcss");
     grunt.loadNpmTasks("grunt-contrib-less");
     grunt.loadNpmTasks("grunt-contrib-concat");
+    grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks("grunt-contrib-watch");
 
     // Definimos las tareas disponibles
-    grunt.registerTask("default", ["clean", "less", "postcss","copy:styles","concat","copy:html","copy:libs","copy:fonts","watch"]);
-    grunt.registerTask("publish", ["clean", "less", "postcss","copy:styles","concat","copy:html","copy:libs","copy:fonts","gh-pages"]);
-
+    grunt.registerTask("default", ["clean", "concurrent:preparation","concurrent:copy", "watch"]);
+    grunt.registerTask("publish", ["clean", "concurrent:preparation","concurrent:copy", "gh-pages"]);
 };
