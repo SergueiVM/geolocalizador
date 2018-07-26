@@ -13,3 +13,6 @@ deploy:
   local_dir: build
   on:
     branch: master
+notifications:
+  email:
+    - $notifications_email
