@@ -17,7 +17,7 @@ class App extends Component {
   }
   render() {
     
-    const {geoCtrl, busqueda, candidato, candidatos} = this.state;
+    const {geoCtrl, busqueda, candidato} = this.state;
     return (
       <main className="container">
         <PageHeader>Geolocalizador</PageHeader>
