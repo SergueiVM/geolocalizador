@@ -2,7 +2,7 @@
   "name": "geolocalizador",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://sergueivm.github.io/geolocalizador/"
+  "homepage": "https://sergueivm.github.io/geolocalizador/",
   "dependencies": {
     "bootstrap": "^3.3.7",
     "react": "^16.4.1",
