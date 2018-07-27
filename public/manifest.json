@@ -1,6 +1,7 @@
 {
   "short_name": "Geolocalizador",
   "name": "Geolocalizar de Coordenadas",
+  "description": "Aplicacion que localiza coordenadas geograficas de direcciones, con caracter formativo la migramos a react.js",
   "icons": [
     {
       "src": "favicon.ico",
