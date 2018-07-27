@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Button, Table} from "react-bootstrap";
+import React, { Component } from 'react';
+import { Table } from "react-bootstrap";
 import Candidato from "./Candidato";
 import {get} from 'lodash';
 

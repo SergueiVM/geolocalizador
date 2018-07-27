@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
-import {get} from 'lodash';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
-import {Button, Table} from 'react-bootstrap';
 import {Header} from './modules/header';
 import {SearchForm} from './modules/searchform';
 import SeccionCandidatos from "./modules/seccion-candidatos/SeccionCandidatos";
