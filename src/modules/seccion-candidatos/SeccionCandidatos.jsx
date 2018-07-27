@@ -9,7 +9,7 @@ class SeccionCandidatos extends Component {
 
     const {candidatos, busqueda} = this.props;
     const candidatosItems = candidatos.map((candidato, index) => <Candidato key={index} candidato={candidato}/>);
-    return ([<div className="bs-callout">
+    return ([<div className="bs-callout" key="resultados">
       <h2>{get(busqueda,"termino")}</h2>
       <div className="table-responsive" data-ng-if="busqueda.hasResults()">
         <Table condensed>
@@ -26,7 +26,7 @@ class SeccionCandidatos extends Component {
         </Table>
       </div>
     </div>,
-      <div data-ng-if="!busqueda.hasResults()">No hay resultados para este término de búsqueda</div>]);
+      <div key="noResultados" data-ng-if="!busqueda.hasResults()">No hay resultados para este término de búsqueda</div>]);
 
   }
 

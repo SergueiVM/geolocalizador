@@ -5,7 +5,7 @@ import SearchProgress from './SearchProgress';
 class SearchForm extends Component {
   render() {
     return ([
-      <form name="formulario" noValidate>
+      <form key="formulario" name="formulario" noValidate>
         <div className="form-group">
           <label htmlFor="direcciones">Direcciones a buscar</label>
           <textarea
@@ -39,9 +39,9 @@ class SearchForm extends Component {
           </Button>
         </ButtonToolbar>
       </form>,
-      <SearchProgress {...this.props}/>,
+      <SearchProgress key="progresoBusqueda" {...this.props}/>,
 
-      <Alert bsStyle="warning" data-ng-if="geoCtrl.state.duplicates">
+      <Alert key="avisoDuplicados" bsStyle="warning" data-ng-if="geoCtrl.state.duplicates">
         <strong>Atenci&oacute;n!</strong> Hemos visto que has introducido alguna direcci&oacute;n duplicada, solo la
                 buscaremos una vez para optimizar nuestros recursos.
       </Alert>,
